@@ -1,234 +1,110 @@
-
 <!DOCTYPE html>
 <html lang="bn">
 <head>
   <meta charset="UTF-8">
-  <title>Spin & Win</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>লোড হচ্ছে...</title>
   <style>
     body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(-45deg, #ff7b00, #ff006a, #6a00ff, #0077ff);
+      background-size: 300% 300%;
+      animation: bgAnimation 8s ease infinite;
+      font-family: "Poppins", sans-serif;
+      color: #fff;
       text-align: center;
-      font-family: sans-serif;
-      background: #fff;
     }
-    .wheel-container {
-      position: relative;
-      width: 320px;
-      height: 320px;
-      margin: 30px auto;
+
+    h1 {
+      font-size: 30px;
+      margin-bottom: 20px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-shadow: 0px 0px 20px rgba(255,255,255,0.9);
+      animation: fadeIn 1.5s ease;
     }
-    .wheel {
-      width: 100%;
-      height: 100%;
+
+    /* Circular Progress Loader with Gradient */
+    .progress-circle {
+      width: 120px;
+      height: 120px;
       border-radius: 50%;
-      border: 10px solid #e60000;
-      position: relative;
-      transition: transform 10s cubic-bezier(0.25, 0.1, 0.25, 1);
-    }
-    .segment {
-      position: absolute;
-      width: 50%;
-      height: 50%;
-      top: 50%;
-      left: 50%;
-      transform-origin: 0% 0%;
-      clip-path: polygon(0 0, 100% 0, 0 100%);
-    }
-    .segment span {
-      position: absolute;
-      left: 28px;
-      top: 20px;
-      transform: rotate(-35deg);
-      font-size: 10px;
+      background: conic-gradient(#ffdd00 0deg, #ffdd00 0deg, rgba(255,255,255,0.08) 0deg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
       font-weight: bold;
-      color: white;
-      text-shadow: 1px 1px 2px black;
+      color: #fff;
+      text-shadow: 0px 0px 10px rgba(255,255,255,0.7);
+      box-shadow: 0 0 25px rgba(255, 215, 0, 0.4), inset 0 0 15px rgba(255,255,255,0.05);
+      animation: pulse 1.8s ease-in-out infinite;
     }
-    .pointer {
-      width: 0;
-      height: 0;
-      border-left: 20px solid transparent;
-      border-right: 20px solid transparent;
-      border-bottom: 30px solid #4caf50;
-      position: absolute;
-      top: -30px;
-      left: 50%;
-      transform: translateX(-50%);
+
+    .note {
+      margin-top: 25px;
+      font-size: 17px;
+      opacity: 0.9;
+      font-weight: 500;
+      text-shadow: 0 0 10px rgba(255,255,255,0.6);
+      animation: fadeInUp 1.8s ease;
     }
-    #spin-btn {
-      padding: 12px 30px;
-      background-color: crimson;
-      color: white;
-      border: none;
-      font-size: 18px;
-      border-radius: 8px;
-      cursor: pointer;
-      margin-top: 20px;
+
+    @keyframes bgAnimation {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
-    #balance {
-      font-size: 20px;
-      margin-top: 20px;
+
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(-20px); }
+      100% { opacity: 1; transform: translateY(0); }
     }
-    form {
-      margin-top: 30px;
-      background: #f0f0f0;
-      padding: 15px;
-      border-radius: 10px;
-      display: inline-block;
+
+    @keyframes fadeInUp {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
     }
-    input, select {
-      padding: 8px;
-      margin: 5px;
-      font-size: 16px;
-      width: 200px;
-    }
-    #withdraw-btn {
-      background-color: green;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      font-size: 16px;
-      margin-top: 10px;
-      border-radius: 6px;
-    }
-    #referral-section {
-      display: none;
-      margin-top: 20px;
-      padding: 15px;
-      background: #e0f7fa;
-      border-radius: 10px;
-    }
-    #copy-link {
-      margin-top: 10px;
-      padding: 10px 20px;
-      background-color: #00796b;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    footer {
-      margin-top: 50px;
+
+    @keyframes pulse {
+      0% { transform: scale(1); box-shadow: 0 0 25px rgba(255, 215, 0, 0.4); }
+      100% { transform: scale(1.08); box-shadow: 0 0 35px rgba(255, 215, 0, 0.8); }
     }
   </style>
-</head>
-<body>
-  <h2>স্পিন করে ডলার জিতে নিন!</h2>
-  <div class="wheel-container">
-    <div class="pointer"></div>
-    <div class="wheel" id="wheel"></div>
-  </div>
-  <button id="spin-btn" type="button">স্পিন করুন</button>
-
-  <div id="balance">মোট ডলার: $<span id="amount">0.0000</span></div>
-
-  <h3>উইথড্র ফর্ম</h3>
-  <h5>উত্তোলনের জন্য কমপক্ষে $10 ডলার থাকতে হবে!</h5>
-  <form id="withdraw-form">
-    <input type="text" placeholder="আপনার নাম" required><br>
-    <select required>
-      <option value="">পেমেন্ট মেথড</option>
-      <option value="bkash">বিকাশ</option>
-      <option value="nagad">নগদ</option>
-    </select><br>
-    <input type="text" placeholder="মোবাইল নম্বর" required><br>
-    <input type="text" placeholder="উত্তোলন ব্যালেন্স" required><br>
-    <button type="submit" id="withdraw-btn">উইথড্র করুন</button>
-  </form>
-
-  <div id="referral-section">
-    <h2>উত্তোলনের আগে আপনাকে ১০ জন বন্ধুকে শেয়ার করতে হবে!</h2>
-    <p>নিচের বাটনে ক্লিক করে লিংক কপি করুন এবং শেয়ার করুন।</p>
-    <input type="text" id="referral-link" value="" readonly style="width: 90%; padding: 8px;">
-    <br>
-    <button id="copy-link">লিংক কপি করুন</button>
-  </div>
-
-  <audio id="spin-sound" src="https://www.soundjay.com/mechanical/sounds/slot-machine-1.mp3" preload="auto"></audio>
 
   <script>
-    const wheel = document.getElementById('wheel');
-    const spinBtn = document.getElementById('spin-btn');
-    const amountSpan = document.getElementById('amount');
-    const spinSound = document.getElementById('spin-sound');
-    const referralSection = document.getElementById('referral-section');
-    const referralLinkInput = document.getElementById('referral-link');
-    const copyLinkBtn = document.getElementById('copy-link');
+    let progress = 0;
+    let circle = null;
+    let interval = null;
 
-    let degree = 0;
-    let balance = parseFloat(localStorage.getItem("balance")) || 0;
-    let referralCount = parseInt(localStorage.getItem("referralCount")) || 0;
-    const myLink = window.location.origin + window.location.pathname + '?ref=' + Date.now();
-    referralLinkInput.value = myLink;
+    document.addEventListener("DOMContentLoaded", () => {
+      circle = document.querySelector(".progress-circle");
+      interval = setInterval(updateProgress, 40);
+    });
 
-    amountSpan.textContent = balance.toFixed(4);
+    function updateProgress() {
+      progress++;
+      circle.style.background = `conic-gradient(#ffdd00 ${progress * 3.6}deg, rgba(255,255,255,0.08) 0deg)`;
+      circle.textContent = progress + "%";
 
-    const segments = ["$0.01", "$0.02", "$0.003", "$0.04", "$0.05", "$0.006", "$0.007", "$0.008", "$0.009", "$0.010"];
-
-    function createWheel() {
-      const angle = 360 / segments.length;
-      for (let i = 0; i < segments.length; i++) {
-        const seg = document.createElement('div');
-        seg.className = 'segment';
-        seg.style.transform = `rotate(${i * angle}deg)`;
-        seg.style.background = i % 2 === 0 ? '#f44336' : '#2196f3';
-
-        const text = document.createElement('span');
-        text.innerText = segments[i];
-        seg.appendChild(text);
-        wheel.appendChild(seg);
+      if (progress >= 100) {
+        clearInterval(interval);
+        window.location.href = "https://bangla-newsbd240.blogspot.com"; 
       }
     }
-
-    spinBtn.onclick = () => {
-      spinBtn.disabled = true;
-      spinSound.play();
-
-      const index = Math.floor(Math.random() * segments.length);
-      const value = parseFloat(segments[index].replace('$', ''));
-      const angle = 3600 + index * (360 / segments.length); // 10 বার ঘুরবে
-
-      wheel.style.transform = `rotate(${angle}deg)`;
-
-      setTimeout(() => {
-        balance += value;
-        localStorage.setItem("balance", balance);
-        amountSpan.textContent = balance.toFixed(4);
-
-        window.location.href = "https://www.profitableratecpm.com/mzze4b78n?key=e3998055e23a80c5cbffb7d80a88c74c";
-      }, 10000); // ১০ সেকেন্ড পরে
-    };
-
-    document.getElementById('withdraw-form').onsubmit = function(e) {
-      e.preventDefault();
-      if (balance < 10) {
-        alert("উত্তোলনের জন্য কমপক্ষে $10 থাকতে হবে। আপনার বর্তমান ব্যালেন্স: $" + balance.toFixed(4));
-      } else if (referralCount < 10) {
-        referralSection.style.display = 'block';
-        alert("উত্তোলনের আগে আপনাকে ১০ জন বন্ধুকে শেয়ার করতে হবে!");
-      } else {
-        alert("আপনার উইথড্র অনুরোধ গ্রহণ করা হয়েছে!");
-      }
-    };
-
-    copyLinkBtn.onclick = () => {
-      navigator.clipboard.writeText(referralLinkInput.value);
-      alert("লিংক কপি হয়েছে!");
-    };
-
-    window.onload = () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.get('ref')) {
-        let count = parseInt(localStorage.getItem("referralCount")) || 0;
-        localStorage.setItem("referralCount", ++count);
-      }
-    };
-
-    createWheel();
   </script>
+</head>
+<body>
 
-  <!-- Footer Ad Script -->
-  <footer>
-    <script type="text/javascript" src="//pl26607619.profitableratecpm.com/89/be/eb/89beeb153f91b5aec28bb0d98b62029c.js"></script>
-  </footer>
+  <h1>⏳ লোড হচ্ছে...</h1>
+  <div class="progress-circle">0%</div>
+  <div class="note">একটু অপেক্ষা করুন, আপনাকে বিজ্ঞাপনে নিয়ে যাওয়া হচ্ছে...</div>
+
 </body>
 </html>
